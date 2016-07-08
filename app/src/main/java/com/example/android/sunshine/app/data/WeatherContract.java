@@ -15,6 +15,8 @@
  */
 package com.example.android.sunshine.app.data;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.text.format.Time;
 
@@ -40,6 +42,12 @@ public class WeatherContract {
      */
     public static final class LocationEntry implements BaseColumns {
         public static final String TABLE_NAME = "location";
+        // Column with the primary key.
+
+        public static final String COLUMN_LOCATION_SETTING = "location_setting";
+        public static final String COLUMN_CITY_NAME = "city_name";
+        public static final String COLUMN_COORD_LAT = "coord_lat";
+        public static final String COLUMN_COORD_LONG = "coord_long";
 
     }
 
@@ -74,5 +82,14 @@ public class WeatherContract {
 
         // Degrees are meteorological degrees (e.g, 0 is north, 180 is south).  Stored as floats.
         public static final String COLUMN_DEGREES = "degrees";
+
+
+/*
+     select short_desc from WeatherEntry where location_id=1
+     getColumnIndex
+
+     getter
+      methods to retrieve values from rows   
+*/
     }
 }
