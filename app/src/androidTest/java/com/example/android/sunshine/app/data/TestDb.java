@@ -112,41 +112,7 @@ public class TestDb extends AndroidTestCase {
         also make use of the ValidateCurrentRecord function from within TestUtilities.
     */
     public void testLocationTable() {
-        // First step: Get reference to writable database
-        WeatherDbHelper dbHelper = new WeatherDbHelper(this.mContext);
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        // Create ContentValues of what you want to insert
-        // (you can use the createNorthPoleLocationValues if you wish)
-        ContentValues testValues = TestUtilities.createNorthPoleLocationValues();
-        // Insert ContentValues into database and get a row ID back
-
-        long locationRowId;
-        locationRowId = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, testValues);
-        assertTrue(locationRowId != -1);
-
-        // Query the database and receive a Cursor back
-        Cursor cursor = db.query(WeatherContract.LocationEntry.TABLE_NAME,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null);
-
-        // Move the cursor to a valid database row
-        assertTrue( "Error: No Records returned from location query", cursor.moveToFirst() );
-
-        // Validate data in resulting Cursor with the original ContentValues
-        // (you can use the validateCurrentRecord function in TestUtilities to validate the
-        // query if you like)
-        TestUtilities.validateCurrentRecord("Error", cursor, testValues);
-
-        //Validate that only one record is returned
-        assertFalse("Error: More than one record returned from location query", cursor.moveToNext());
-
-        // Finally, close the cursor and database
-        cursor.close();
-        db.close();
+        insertLocation();
     }
  
 
@@ -199,7 +165,42 @@ public class TestDb extends AndroidTestCase {
         code from testLocationTable to here so that you can call this code from both
         testWeatherTable and testLocationTable.
      */
-    public long insertLocation() {
-        return -1L;
+    public long insertLocation(){
+    // First step: Get reference to writable database
+    WeatherDbHelper dbHelper = new WeatherDbHelper(this.mContext);
+    SQLiteDatabase db = dbHelper.getWritableDatabase();
+    // Create ContentValues of what you want to insert
+    // (you can use the createNorthPoleLocationValues if you wish)
+    ContentValues testValues = TestUtilities.createNorthPoleLocationValues();
+    // Insert ContentValues into database and get a row ID back
+
+    long locationRowId;
+    locationRowId = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, testValues);
+    assertTrue(locationRowId != -1);
+
+    // Query the database and receive a Cursor back
+    Cursor cursor = db.query(WeatherContract.LocationEntry.TABLE_NAME,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null);
+
+    // Move the cursor to a valid database row
+    assertTrue( "Error: No Records returned from location query", cursor.moveToFirst() );
+
+    // Validate data in resulting Cursor with the original ContentValues
+    // (you can use the validateCurrentRecord function in TestUtilities to validate the
+    // query if you like)
+    TestUtilities.validateCurrentRecord("Error", cursor, testValues);
+
+    //Validate that only one record is returned
+    assertFalse("Error: More than one record returned from location query", cursor.moveToNext());
+
+    // Finally, close the cursor and database
+    cursor.close();
+    db.close();
+    return locationRowId;
     }
 }
