@@ -67,13 +67,12 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
         long locationId;
 
         Cursor locationCursor = mContext.getContentResolver().query(
-                WeatherContract.LocationEntry.CONTENT_URI,
-                new String[]{
-                        WeatherContract.LocationEntry._ID
-                },
-                WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ?",
-                new String[]{locationSetting},
-                null);
+            WeatherContract.LocationEntry.CONTENT_URI,
+            new String[]{WeatherContract.LocationEntry._ID},
+            WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ?",
+            new String[]{locationSetting},
+            null);
+
         if(locationCursor.moveToFirst()){
             int locationIdIndex = locationCursor.getColumnIndex(WeatherContract.LocationEntry._ID);
             locationId = locationCursor.getLong(locationIdIndex);
@@ -89,6 +88,7 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
                     WeatherContract.LocationEntry.CONTENT_URI,
                     locationValues
             );
+
             locationId = ContentUris.parseId(insertedUri);
         }
         locationCursor.close();
@@ -224,21 +224,21 @@ public class FetchWeatherTask extends AsyncTask<String, Void, Void> {
 
                 cVVector.add(weatherValues);
             }
-
+            int inserted = 0;
             // add to database
             if ( cVVector.size() > 0 ) {
                 // Student: call bulkInsert to add the weatherEntries to the database here
                 ContentValues[] contentValues = new ContentValues[cVVector.size()];
                 cVVector.toArray(contentValues);
-                mContext.getContentResolver().bulkInsert(WeatherContract.WeatherEntry.CONTENT_URI, contentValues);
+                inserted = mContext.getContentResolver().bulkInsert(WeatherContract.WeatherEntry.CONTENT_URI, contentValues);
             }
 
             // Sort order:  Ascending, by date.
-            String sortOrder = WeatherEntry.COLUMN_DATE + " ASC";
-            Uri weatherForLocationUri = WeatherEntry.buildWeatherLocationWithStartDate(
-                    locationSetting, System.currentTimeMillis());
+            //String sortOrder = WeatherEntry.COLUMN_DATE + " ASC";
+            //Uri weatherForLocationUri = WeatherEntry.buildWeatherLocationWithStartDate(
+            //        locationSetting, System.currentTimeMillis());
 
-            Log.d(LOG_TAG, "FetchWeatherTask Complete. " + cVVector.size() + " Inserted");
+            Log.d(LOG_TAG, "FetchWeatherTask Complete. " + inserted + " Inserted");
 
            // return resultStrs;
 
