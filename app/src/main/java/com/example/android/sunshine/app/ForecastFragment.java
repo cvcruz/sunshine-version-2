@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -77,14 +78,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         if(id==R.id.action_refresh){
             updateWeather();
             return true;
-
         }
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -123,14 +121,14 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private void updateWeather(){
         String location = Utility.getPreferredLocation(getActivity());
         FetchWeatherTask fetchWeatherTask = new FetchWeatherTask(getActivity());
+        Log.d("FETCHWEATHERTASK","go get it for " + location);
         fetchWeatherTask.execute(location);
     }
-
-    @Override
-    public void onStart(){
-        super.onStart();
+    public void onLocationChanged(){
         updateWeather();
+        getLoaderManager().restartLoader(FORECAST_LOADER, null, this);
     }
+
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle){
         String locationSetting = Utility.getPreferredLocation(getActivity());
