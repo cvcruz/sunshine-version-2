@@ -20,7 +20,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.MenuItemCompat;
@@ -77,7 +77,7 @@ public class DetailActivity extends ActionBarActivity {
     /**
      * A placeholder fragment containing a simple view.
      */
-    public static class DetailFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    public static class DetailFragment extends Fragment implements LoaderCallbacks<Cursor> {
         private static final String LOG_TAG = DetailFragment.class.getSimpleName();
 
         private static final String FORECAST_SHARE_HASHTAG = "#Sunshineapp";
@@ -126,22 +126,20 @@ public class DetailActivity extends ActionBarActivity {
             MenuItem menuItem = menu.findItem(R.id.action_share);
             // Fetch and store ShareActionProvider
             mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
-            if (mForecastStr != null) {
-//                mShareActionProvider.setShareIntent(createShareForecastIntent());
+
+            if (mShareActionProvider != null) {
+                mShareActionProvider.setShareIntent(createShareForecastIntent());
             }
-            else {
-                Log.d(LOG_TAG,"BIG BOOBOO");
-            }
+
 
         }
         // Call to update the share intent
         private Intent createShareForecastIntent() {
-            Intent shareIntent = new Intent(Intent.ACTION_SEND);
-            shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-            shareIntent.setType("text/plain");
-            shareIntent.putExtra(Intent.EXTRA_TEXT, mForecastStr + FORECAST_SHARE_HASHTAG);
-
-            return shareIntent;
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, mForecastStr + FORECAST_SHARE_HASHTAG);
+                return shareIntent;
         }
         @Override
         public void onActivityCreated(Bundle savedInstanceState){
@@ -152,6 +150,7 @@ public class DetailActivity extends ActionBarActivity {
         public Loader<Cursor> onCreateLoader(int i, Bundle bundle){
             Intent intent = getActivity().getIntent();
             if(intent == null){
+                Log.d(LOG_TAG,"INTENT IS NULL?0");
                 return null;
             }
             return new CursorLoader(getActivity(),
@@ -186,10 +185,9 @@ public class DetailActivity extends ActionBarActivity {
             detailTextView.setText(mForecastStr);
 
             // If onCreateOptionsMenu has already happened, we need to update the share intent now.
-            //if (mShareActionProvider != null) {
-            //    Log.d(LOG_TAG, "has happend mforecaststr:" + mForecastStr);
-            //    mShareActionProvider.setShareIntent(createShareForecastIntent());
-            //}
+            if (mShareActionProvider != null) {
+                mShareActionProvider.setShareIntent(createShareForecastIntent());
+            }
         }
         @Override
         public void onLoaderReset(Loader<Cursor> cursorLoader){
