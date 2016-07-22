@@ -159,9 +159,10 @@ public class DetailFragment extends Fragment implements LoaderCallbacks<Cursor> 
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         Log.v(LOG_TAG, "In onLoadFinished");
         if (!data.moveToFirst()) { return; }
-        int weatherId = data.getInt(COL_WEATHER_ID);
-
-        mIconView.setImageResource(R.drawable.ic_launcher);
+        int weatherId = data.getInt(COL_WEATHER_CONDITION_ID);
+        Log.v(LOG_TAG,"weatherId:" + weatherId);
+        Log.v(LOG_TAG,"icon:" + Utility.getArtResourceForWeatherCondition(weatherId));
+        mIconView.setImageResource(Utility.getArtResourceForWeatherCondition(weatherId));
 
         long date = data.getLong(COL_WEATHER_DATE);
         String friendlyDateText = Utility.getDayName(getActivity(), date);
@@ -202,5 +203,4 @@ public class DetailFragment extends Fragment implements LoaderCallbacks<Cursor> 
     public void onLoaderReset(Loader<Cursor> cursorLoader){
 
     }
-
 }
