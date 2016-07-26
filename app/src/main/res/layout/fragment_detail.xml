@@ -18,8 +18,7 @@
         <TextView
             android:id="@+id/detail_date_textview"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="June 24"/>
+            android:layout_height="wrap_content"/>
 
         <!-- Main content: high, low, art, weather state -->
         <LinearLayout
