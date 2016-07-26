@@ -159,7 +159,7 @@ public class DetailFragment extends Fragment implements LoaderCallbacks<Cursor> 
 
             return new CursorLoader(getActivity(),
                     mUri,
-                    null,
+                    DETAIL_COLUMNS,
                     null,
                     null,
                     null);
